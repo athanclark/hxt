@@ -304,7 +304,7 @@ escapeXmlRefs           :: (Char -> String -> String, Char -> String -> String)
 escapeXmlRefs           = (cquote, aquote)
     where
     cquote c
-        | c `elem` "<&" = ('&' :)
+        | c `elem` "<>\"\'&\n\r\t" = ('&' :)
                           . ((lookupRef c xmlEntityRefTable) ++)
                           . (';' :)
         | otherwise     = (c :)
@@ -331,7 +331,7 @@ escapeHtmlRefs          = (cquote, aquote)
                           . (';' :)
         | otherwise     = (c :)
 
-    isHtmlTextEsc c     = c >= toEnum(128) || ( c `elem` "<&" )
+    isHtmlTextEsc c     = c >= toEnum(128) || ( c `elem` "<>\"\'&\n\r\t" )
     isHtmlAttrEsc c     = c >= toEnum(128) || ( c `elem` "<>\"\'&\n\r\t" )
 
 lookupRef               :: Char -> EntityRefTable -> String
